@@ -47,7 +47,7 @@ class Stock_Analysis():
 		for row in results:
 			code = row[0]
 			code_list.append(code)
-		print ("第一步查询并入《stock_today_detail》表完成！")
+		# print ("第一步查询并入《stock_today_detail》表完成！")
 		return code_list
 
 	def queryDetail(self, code, start_date=None, end_date=None):
@@ -66,11 +66,11 @@ class Stock_Analysis():
 		close = float(sqlData['close'])
 		low = float(sqlData['low'])
 		volume = float(sqlData['volume'])
-		sql = "INSERT INTO zhijia.stock_history_detail VALUES(null, " + code + " , " + str(open) + ", " + str(high) + ", " + str(close) + ", " + str(low) + ", " + str(volume) + ", " + str(record_date) + ", NOW()) ;"
+		sql = "INSERT INTO zhijia.stock_history_detail VALUES(null, " + code + " , " + str(open) + ", " + str(high) + ", " + str(close) + ", " + str(low) + ", " + str(volume) + ", \'" + str(record_date) + "\', NOW()) ;"
 		# print (sql)
 		cursor.execute(sql)
 		db.commit()
-		print ("第二步查询并入《stock_history_detail》表完成！")
+		# print ("第二步查询并入《stock_history_detail》表完成！")
 
 
 	def Analysis(self, code, DetailINFO):
@@ -126,13 +126,13 @@ class Stock_Analysis():
 		detailDF = data.tail(100)
 		# for i in data.itertuples():
 		# 	print (i)
-		print ("第三步分析数据完成！")
+		# print ("第三步分析数据完成！")
 		self.Summary(code, detailDF)
 
 	def Summary(self, code, detailDF):
 		# param = random.randint(0, 99)
 		# print(param)
-		param = 1
+		param = -1
 		index = detailDF.index[param]
 		print (detailDF.iloc[param])
 		close = detailDF.iloc[param, 0]
@@ -179,7 +179,7 @@ class Stock_Analysis():
 			print ("正常无操作")
 		cursor.execute(sql)
 		db.commit()
-		print("第四步全部完成！")
+		# print("第四步全部完成！")
 		
 	# 睡眠到第二天执行修改步数的时间
 	def get_sleep_time(self):
@@ -201,6 +201,7 @@ if __name__ == '__main__':
 		code_list = Stock_Analysis().get_today_all_info()
 		for code in code_list:
 			try:
+				print ("============================================================")
 				Stock_Analysis().queryDetail(str(code))
 			except Exception as ex:
 				print (ex)
