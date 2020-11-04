@@ -195,17 +195,27 @@ class Stock_Analysis():
 	
 if __name__ == '__main__':
 	while 1:
-		# db = pymysql.connect(host="192.168.146.129", port=63001, user="root", passwd="root", db="zhijia", charset='utf8')
-		db = pymysql.connect(host="192.168.0.115", port=50004, user="root", passwd="root", db="zhijia", charset='utf8')
+		db = pymysql.connect(host="192.168.146.130", port=63001, user="root", passwd="root", db="zhijia", charset='utf8')
+		# db = pymysql.connect(host="192.168.0.115", port=50004, user="root", passwd="root", db="zhijia", charset='utf8')
 		cursor = db.cursor()
-		code_list = Stock_Analysis().get_today_all_info()
-		for code in code_list:
-			try:
-				print ("============================================================")
-				Stock_Analysis().queryDetail(str(code))
-			except Exception as ex:
-				print (ex)
-		# Stock_Analysis().queryDetail('300125')
+		DetailINFO = ts.get_hist_data(code = '601318', start='2020-01-01')
+		today = str(DetailINFO.head(1).index.values)[2:-2]
+		sql = "select count(1) from stock_history_detail where record_date = \'" + str(today) + "\' ;"
+		cursor.execute(sql)
+		results = cursor.fetchone()
+		isexist = results[0]
+		if isexist == 0:
+			code_list = Stock_Analysis().get_today_all_info()
+			print ()
+			for code in code_list:
+				try:
+					print ("============================================================")
+					Stock_Analysis().queryDetail(str(code))
+				except Exception as ex:
+					print (ex)
+			Stock_Analysis().queryDetail('300125')
+		else:
+			print ("该日期==>" + today + "<==已经执行过了，自动跳过!")
 		db.commit()
 		db.close()
 		sleep_time = Stock_Analysis().get_sleep_time()
