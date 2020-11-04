@@ -15,7 +15,10 @@ warnings.filterwarnings("ignore")
 class Stock_Analysis():
 	def get_today_all_info(self):
 		all_info = ts.get_today_all()
+		time_stamp = int(time.time())
+		stock_file = "/project/script/stock/data/stock/" + str(time_stamp) + ".csv"
 		# all_info.to_csv("F:\\Project\\Demo\\data\\all_info.csv")
+		all_info.to_csv(stock_file)
 		for stock in all_info.itertuples():
 			code = stock[1]
 			name = stock[2]
