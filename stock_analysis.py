@@ -34,7 +34,7 @@ class Stock_Analysis():
 			results = cursor.fetchone()
 			isexist = results[0]
 			if isexist == 0:
-				sql = "INSERT INTO zhijia.stock_today_detail values(null, " + str(code) + ", \'" + str(name) + "\', " + str(changepercent) + ", " + str(trade) + ", " + str(open) + ", " + str(high) + ", " + str(low) + ", " + str(settlement) + ", " + str(volume) + ", 1, 0, NOW()) ;"
+				sql = "INSERT INTO zhijia.stock_today_detail values(null, \'" + str(code) + "\', \'" + str(name) + "\', " + str(changepercent) + ", " + str(trade) + ", " + str(open) + ", " + str(high) + ", " + str(low) + ", " + str(settlement) + ", " + str(volume) + ", 1, 0, NOW()) ;"
 				# print (sql)
 				cursor.execute(sql)
 			else:
@@ -69,7 +69,7 @@ class Stock_Analysis():
 		close = float(sqlData['close'])
 		low = float(sqlData['low'])
 		volume = float(sqlData['volume'])
-		sql = "INSERT INTO zhijia.stock_history_detail VALUES(null, " + code + " , " + str(open) + ", " + str(high) + ", " + str(close) + ", " + str(low) + ", " + str(volume) + ", \'" + str(record_date) + "\', NOW()) ;"
+		sql = "INSERT INTO zhijia.stock_history_detail VALUES(null, \'" + code + "\' , " + str(open) + ", " + str(high) + ", " + str(close) + ", " + str(low) + ", " + str(volume) + ", \'" + str(record_date) + "\', NOW()) ;"
 		# print (sql)
 		cursor.execute(sql)
 		db.commit()
@@ -150,7 +150,7 @@ class Stock_Analysis():
 		isexist = results[0]
 		if isexist == 0:
 			# sql = "INSERT INTO zhijia.stock_buy_sell values(null, " + str(code) + " , " + str(close) + ", " + str(k) + ", " + str(d) + ", " + str(j) + ", 10000, 0, 0, null);"
-			sql = "INSERT INTO zhijia.stock_buy_sell VALUES(null, " + str(code) + ", " + str(k) + ", " + str(d) + ", " + str(j) + ", 0, 0, 10000, 0, -1, NOW()) ;"
+			sql = "INSERT INTO zhijia.stock_buy_sell VALUES(null, \'" + str(code) + "\', " + str(k) + ", " + str(d) + ", " + str(j) + ", 0, 0, 10000, 0, -1, NOW()) ;"
 			# print (sql)
 			cursor.execute(sql)
 			db.commit()

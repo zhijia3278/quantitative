@@ -21,7 +21,7 @@ SET FOREIGN_KEY_CHECKS=0;
 DROP TABLE IF EXISTS `stock_today_detail`;
 CREATE TABLE `stock_today_detail` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `code` int(10) DEFAULT NULL,
+  `code` char(6) DEFAULT NULL,
   `name` varchar(20) COLLATE utf8_bin DEFAULT NULL,
   `changepercent` decimal(7,2) DEFAULT NULL,
   `trade` decimal(7,2) DEFAULT NULL,

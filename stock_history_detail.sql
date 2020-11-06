@@ -21,7 +21,7 @@ SET FOREIGN_KEY_CHECKS=0;
 DROP TABLE IF EXISTS `stock_history_detail`;
 CREATE TABLE `stock_history_detail` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `code` int(10) DEFAULT NULL,
+  `code` char(6) DEFAULT NULL,
   `open` decimal(7,2) DEFAULT NULL,
   `high` decimal(7,2) DEFAULT NULL,
   `close` decimal(7,2) DEFAULT NULL,
