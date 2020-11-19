@@ -164,20 +164,20 @@ class Stock_Analysis():
 			if flag != 1:
 				num = float(money) / float(close)
 				money = 0
-				sql = "UPDATE zhijia.stock_buy_sell set buy = " + str(close) + ", k = " + str(k) + ", d = " + str(d) + ", j = " + str(j) + ", money = " + str(money) + ", num = " + str(num) + ", flag = 1 WHERE code = \'" + code + "\' ;"
+				sql = "UPDATE zhijia.stock_buy_sell set buy = " + str(close) + ", k = " + str(k) + ", d = " + str(d) + ", j = " + str(j) + ", money = " + str(money) + ", num = " + str(num) + ", flag = 1, validdate = NOW() WHERE code = \'" + code + "\' ;"
 				# print (sql)
-				print ("\033[43;30m 到达买入时间 \033[0m")
+				print ("\033[43;30m 股票代号" + code + "到达买入时间 \033[0m")
 			else : 
-				print ("买入正常无操作")
+				print ("股票代号" + code + "买入正常无操作")
 		elif k * param2 < d:
 			if flag != -1:
 				money = float(num) * float(close)
 				num = 0
-				sql = "UPDATE zhijia.stock_buy_sell set sell = " + str(close) + ", k = " + str(k) + ", d = " + str(d) + ", j = " + str(j) + ", money = " + str(money) + ", num = " + str(num) + ", flag = -1 WHERE code = \'" + code + "\' ;"
+				sql = "UPDATE zhijia.stock_buy_sell set sell = " + str(close) + ", k = " + str(k) + ", d = " + str(d) + ", j = " + str(j) + ", money = " + str(money) + ", num = " + str(num) + ", flag = -1, validdate = NOW() WHERE code = \'" + code + "\' ;"
 				# print (sql)
-				print ("到达卖出时间")
+				print ("\033[43;30m 股票代号" + code + "到达卖出时间 \033[0m")
 			else :
-				print ("\033[43;30m 卖出正常无操作 \033[0m")
+				print ("股票代号" + code + "卖出正常无操作")
 		else :
 			print ("正常无操作")
 		cursor.execute(sql)
@@ -197,32 +197,36 @@ class Stock_Analysis():
 		return tomorrow_run_time - current_time
 	
 if __name__ == '__main__':
-	while 1:
-		# db = pymysql.connect(host="192.168.146.130", port=63001, user="root", passwd="root", db="zhijia", charset='utf8')
-		db = pymysql.connect(host="106.75.126.130", port=3306, user="root", passwd="root", db="zhijia", charset='utf8')
-		cursor = db.cursor()
-		DetailINFO = ts.get_hist_data(code = '601318', start='2020-01-01')
-		today = str(DetailINFO.head(1).index.values)[2:-2]
-		sql = "select count(1) from stock_history_detail where record_date = \'" + str(today) + "\' ;"
-		cursor.execute(sql)
-		results = cursor.fetchone()
-		isexist = results[0]
-		if isexist == 0:
-			code_list = Stock_Analysis().get_today_all_info()
-			print ()
-			for code in code_list:
-				try:
-					print ("============================================================")
-					Stock_Analysis().queryDetail(str(code))
-				except Exception as ex:
-					print (ex)
-			Stock_Analysis().queryDetail('300125')
-		else:
-			print ("该日期==>" + today + "<==已经执行过了，自动跳过!")
-		db.commit()
-		db.close()
-		sleep_time = Stock_Analysis().get_sleep_time()
-		print ("当日任务完成，当前作业时间是====>" + str(datetime.datetime.now()) + ",计算出来的睡眠时间是====>" + str(sleep_time))
-		time.sleep(sleep_time)
+	print("========================================================================================================")
+	print("============================新的一天任务开始了===>" + str(datetime.datetime.now()) + "============================")
+	print("========================================================================================================")
+	start_time = int(time.time())
+	# while 1:
+	db = pymysql.connect(host="localhost", port=3306, user="root", passwd="root", db="zhijia", charset='utf8')
+	# db = pymysql.connect(host="106.75.126.130", port=3306, user="root", passwd="p5ca&*WOz9xjV@qU", db="zhijia", charset='utf8')
+	cursor = db.cursor()
+	DetailINFO = ts.get_hist_data(code = '601318', start='2020-01-01')
+	today = str(DetailINFO.head(1).index.values)[2:-2]
+	sql = "select count(1) from stock_history_detail where record_date = \'" + str(today) + "\' ;"
+	cursor.execute(sql)
+	results = cursor.fetchone()
+	isexist = results[0]
+	if isexist == 0:
+		code_list = Stock_Analysis().get_today_all_info()
+		print ()
+		for code in code_list:
+			try:
+				Stock_Analysis().queryDetail(str(code))
+				print ("============================================================")
+			except Exception as ex:
+				print (ex)
+	else:
+		print ("该日期==>" + today + "<==已经执行过了，自动跳过!")
+	db.commit()
+	db.close()
+	end_time = int(time.time())
+	# sleep_time = Stock_Analysis().get_sleep_time()
+	print ("当日任务完成，当前作业时间是====>" + str(datetime.datetime.now()) + "=====>耗时:" + str(end_time - start_time) + "秒")
+	# time.sleep(sleep_time)
 
 
