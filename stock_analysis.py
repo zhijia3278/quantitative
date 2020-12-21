@@ -16,7 +16,7 @@ class Stock_Analysis():
 	def get_today_all_info(self):
 		all_info = ts.get_today_all()
 		time_stamp = int(time.time())
-		stock_file = "/project/script/stock/data/stock/" + str(time_stamp) + ".csv"
+		stock_file = "/project/stock/data/" + str(time_stamp) + ".csv"
 		# all_info.to_csv("F:\\Project\\Demo\\data\\all_info.csv")
 		all_info.to_csv(stock_file)
 		for stock in all_info.itertuples():
@@ -203,7 +203,7 @@ if __name__ == '__main__':
 	start_time = int(time.time())
 	# while 1:
 	db = pymysql.connect(host="localhost", port=3306, user="root", passwd="root", db="zhijia", charset='utf8')
-	# db = pymysql.connect(host="106.75.126.130", port=3306, user="root", passwd="p5ca&*WOz9xjV@qU", db="zhijia", charset='utf8')
+	# db = pymysql.connect(host="106.75.126.130", port=3306, user="root", passwd="S:(10N(b5X*#", db="zhijia", charset='utf8')
 	cursor = db.cursor()
 	DetailINFO = ts.get_hist_data(code = '601318', start='2020-01-01')
 	today = str(DetailINFO.head(1).index.values)[2:-2]
